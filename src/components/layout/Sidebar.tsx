@@ -4,19 +4,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
-  { href: "/dashboard", icon: "dashboard",   label: "Dashboard" },
-  { href: "/",          icon: "upload_file", label: "Uploads"   },
-  { href: "/history",   icon: "history",     label: "History"   },
+  { href: "/",        icon: "checklist",   label: "Review Queue" },
+  { href: "/upload",  icon: "upload_file", label: "Upload PO"    },
+  { href: "/history", icon: "history",     label: "History"      },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
 
-  // "Uploads" is active for both "/" and "/po/[id]"
-  const isActive = (href: string) =>
-    href === "/"
-      ? pathname === "/" || pathname.startsWith("/po/")
-      : pathname === href;
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/" || pathname.startsWith("/po/");
+    return pathname === href || pathname.startsWith(href + "/");
+  };
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-surface dark:bg-inverse-surface flex flex-col py-8 z-50 border-r border-surface-container">

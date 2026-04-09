@@ -15,14 +15,16 @@ enum POStatus {
 }
 
 model PurchaseOrder {
-  id            String    @id @default(cuid())
-  poid          String    @unique
-  date_created  DateTime  @default(now())
-  status        POStatus  @default(pending)
-  total_revenue Float     @default(0)
-  raw_file_url  String?
-  comments      String?
-  items         POItem[]
+  id               String    @id @default(cuid())
+  poid             String    @unique
+  date_created     DateTime  @default(now())
+  status           POStatus  @default(pending)
+  total_revenue    Float     @default(0)
+  raw_file_url     String?
+  comments         String?
+  billing_address  String?
+  shipping_address String?
+  items            POItem[]
 
   @@map("purchase_orders")
 }
@@ -32,6 +34,7 @@ model POItem {
   po_id         String
   sku_name      String
   units_ordered Int
+  buy_price     Float?
   purchaseOrder PurchaseOrder @relation(fields: [po_id], references: [id], onDelete: Cascade)
 
   @@map("po_items")

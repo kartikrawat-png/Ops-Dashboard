@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 // ─── Shipping timeline types (mirrors src/lib/calculateShippingTimeline.ts) ───
@@ -322,11 +323,14 @@ function ActionPanel({ po, onUpdated }: ActionPanelProps) {
 // ─── Main ReviewQueue component ───────────────────────────────────────────────
 
 export default function ReviewQueue() {
+  const searchParams = useSearchParams();
+  const submittedPoid = searchParams.get("submitted");
   const [orders, setOrders] = useState<PurchaseOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<POStatus | "all">("all");
+  const [bannerDismissed, setBannerDismissed] = useState(false);
 
   useEffect(() => {
     fetch("/api/purchase-orders")
@@ -352,8 +356,8 @@ export default function ReviewQueue() {
       ? orders
       : orders.filter((o) => o.status === statusFilter);
 
-  // Show the timeline column only when at least one approved row is visible
-  const showTimeline = filtered.some((o) => o.status === "approved");
+  // Show ETA column when any non-rejected order is visible
+  const showTimeline = filtered.some((o) => o.status !== "rejected");
 
   const counts = orders.reduce<Record<POStatus | "all", number>>(
     (acc, o) => {
@@ -366,6 +370,24 @@ export default function ReviewQueue() {
 
   return (
     <div className="space-y-6">
+      {/* ── Submission success banner ── */}
+      {submittedPoid && !bannerDismissed && (
+        <div className="flex items-center justify-between bg-primary-fixed/20 border border-primary-fixed px-5 py-3">
+          <div className="flex items-center gap-3">
+            <span className="material-symbols-outlined text-[18px] text-on-surface">check_circle</span>
+            <p className="text-sm font-label font-bold text-on-surface uppercase tracking-tight">
+              PO {submittedPoid} submitted — pending review
+            </p>
+          </div>
+          <button
+            onClick={() => setBannerDismissed(true)}
+            className="text-on-surface-variant hover:text-on-surface transition-colors"
+          >
+            <span className="material-symbols-outlined text-[18px]">close</span>
+          </button>
+        </div>
+      )}
+
       {/* ── Header ── */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
@@ -499,10 +521,10 @@ export default function ReviewQueue() {
                       <StatusBadge status={po.status} />
                     </td>
 
-                    {/* Tentative Timeline — approved rows only */}
+                    {/* Tentative Timeline — all non-rejected rows */}
                     {showTimeline && (
                       <td className="px-4 py-3">
-                        {po.status === "approved" ? (
+                        {po.status !== "rejected" ? (
                           <ShippingTimelineCell poId={po.id} />
                         ) : (
                           <span className="text-xs text-zinc-300 dark:text-zinc-600">—</span>

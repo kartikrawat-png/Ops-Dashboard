@@ -12,13 +12,13 @@ function getBreadcrumbs(pathname: string): Crumb[] {
     ];
   }
   if (pathname === "/") {
-    return [
-      { label: "Uploads", muted: true },
-      { label: "Review Queue" },
-    ];
+    return [{ label: "Review Queue" }];
   }
-  if (pathname === "/dashboard") {
-    return [{ label: "Dashboard" }];
+  if (pathname === "/upload") {
+    return [
+      { label: "Upload PO", muted: true },
+      { label: "New Purchase Order" },
+    ];
   }
   if (pathname === "/history") {
     return [{ label: "History" }];

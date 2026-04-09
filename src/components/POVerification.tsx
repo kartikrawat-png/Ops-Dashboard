@@ -11,6 +11,7 @@ interface POItem {
   id: string;
   sku_name: string;
   units_ordered: number;
+  buy_price: number | null;
 }
 
 interface SerializedPO {
@@ -21,6 +22,8 @@ interface SerializedPO {
   total_revenue: number;
   raw_file_url: string | null;
   comments: string | null;
+  billing_address: string | null;
+  shipping_address: string | null;
   items: POItem[];
 }
 
@@ -296,6 +299,45 @@ export default function POVerification({ po }: { po: SerializedPO }) {
           </div>
         </div>
 
+        {/* Partner details */}
+        {(po.billing_address || po.shipping_address) && (
+          <div className="bg-surface-container-low p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <span
+                className="material-symbols-outlined text-on-surface-variant text-[22px]"
+                style={{ fontVariationSettings: "'FILL' 0" }}
+              >
+                local_shipping
+              </span>
+              <h3 className="text-sm font-bold uppercase tracking-widest font-label text-on-surface">
+                Partner Details
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+              {po.billing_address && (
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-bold uppercase text-on-surface-variant tracking-wider font-label">
+                    Billing Address
+                  </label>
+                  <p className="text-sm text-on-surface whitespace-pre-line leading-relaxed">
+                    {po.billing_address}
+                  </p>
+                </div>
+              )}
+              {po.shipping_address && (
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-bold uppercase text-on-surface-variant tracking-wider font-label">
+                    Shipping Address
+                  </label>
+                  <p className="text-sm text-on-surface whitespace-pre-line leading-relaxed">
+                    {po.shipping_address}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Line item validation table */}
         <div className="flex-1 flex flex-col gap-4">
           <h3 className="text-sm font-bold uppercase tracking-widest font-label px-1">
@@ -308,13 +350,14 @@ export default function POVerification({ po }: { po: SerializedPO }) {
                 <tr className="bg-surface-container font-label uppercase text-[10px] tracking-[0.2em] text-on-surface-variant">
                   <th className="py-4 px-6">SKU</th>
                   <th className="py-4 px-6 text-right">Units Ordered</th>
+                  <th className="py-4 px-6 text-right">Buy Price</th>
                 </tr>
               </thead>
               <tbody className="text-sm font-medium">
                 {po.items.length === 0 ? (
                   <tr>
                     <td
-                      colSpan={2}
+                      colSpan={3}
                       className="py-8 px-6 text-center text-on-surface-variant text-xs italic"
                     >
                       No line items found.
@@ -331,6 +374,11 @@ export default function POVerification({ po }: { po: SerializedPO }) {
                       </td>
                       <td className="py-4 px-6 border-b border-surface-container text-right font-bold">
                         {item.units_ordered.toLocaleString()}
+                      </td>
+                      <td className="py-4 px-6 border-b border-surface-container text-right text-on-surface-variant">
+                        {item.buy_price != null
+                          ? new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(item.buy_price)
+                          : "—"}
                       </td>
                     </tr>
                   ))
