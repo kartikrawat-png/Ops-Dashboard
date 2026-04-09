@@ -1,26 +1,120 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* ─── Design System Color Tokens ──────────────────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Surfaces */
+  --color-background:                #f6f6f6;
+  --color-surface:                   #f6f6f6;
+  --color-surface-bright:            #f6f6f6;
+  --color-surface-dim:               #d3d5d5;
+  --color-surface-variant:           #dbdddd;
+  --color-surface-container-lowest:  #ffffff;
+  --color-surface-container-low:     #f0f1f1;
+  --color-surface-container:         #e7e8e8;
+  --color-surface-container-high:    #e1e3e3;
+  --color-surface-container-highest: #dbdddd;
+  --color-inverse-surface:           #0c0f0f;
+
+  /* Primary (gold / industrial yellow) */
+  --color-primary:                   #6d5a00;
+  --color-primary-dim:               #5f4e00;
+  --color-primary-fixed:             #fdd400;
+  --color-primary-fixed-dim:         #edc600;
+  --color-primary-container:         #fdd400;
+  --color-inverse-primary:           #fdd400;
+  --color-on-primary:                #fff2ce;
+  --color-on-primary-fixed:          #433700;
+  --color-on-primary-fixed-variant:  #645300;
+  --color-on-primary-container:      #594a00;
+  --color-surface-tint:              #6d5a00;
+
+  /* Secondary */
+  --color-secondary:                 #5c5b5b;
+  --color-secondary-dim:             #504f4f;
+  --color-secondary-fixed:           #e5e2e1;
+  --color-secondary-fixed-dim:       #d6d4d3;
+  --color-secondary-container:       #e5e2e1;
+  --color-on-secondary:              #f5f2f1;
+  --color-on-secondary-fixed:        #403f3f;
+  --color-on-secondary-fixed-variant:#5c5b5b;
+  --color-on-secondary-container:    #525151;
+
+  /* Tertiary */
+  --color-tertiary:                  #605e00;
+  --color-tertiary-dim:              #535200;
+  --color-tertiary-fixed:            #faf763;
+  --color-tertiary-fixed-dim:        #ebe857;
+  --color-tertiary-container:        #faf763;
+  --color-on-tertiary:               #fcf965;
+  --color-on-tertiary-fixed:         #4b4a00;
+  --color-on-tertiary-fixed-variant: #696800;
+  --color-on-tertiary-container:     #5e5d00;
+
+  /* On-surface roles */
+  --color-on-surface:                #2d2f2f;
+  --color-on-surface-variant:        #5a5c5c;
+  --color-on-background:             #2d2f2f;
+  --color-inverse-on-surface:        #9c9d9d;
+
+  /* Outlines */
+  --color-outline:                   #767777;
+  --color-outline-variant:           #acadad;
+
+  /* Error */
+  --color-error:                     #b02500;
+  --color-error-dim:                 #b92902;
+  --color-error-container:           #f95630;
+  --color-on-error:                  #ffefec;
+  --color-on-error-container:        #520c00;
+
+  /* ─── Typography ─────────────────────────────────────────── */
+  --font-headline: var(--font-space-grotesk), 'Space Grotesk', sans-serif;
+  --font-body:     var(--font-inter), 'Inter', sans-serif;
+  --font-label:    var(--font-space-grotesk), 'Space Grotesk', sans-serif;
+
+  /* ─── Border radius (sharp industrial aesthetic) ─────────── */
+  --radius:     0px;
+  --radius-sm:  0px;
+  --radius-md:  0px;
+  --radius-lg:  0px;
+  --radius-xl:  0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-full: 9999px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Material Symbols ────────────────────────────────────────────────────── */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-family: 'Material Symbols Outlined', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  -webkit-font-feature-settings: 'liga';
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
 }
+
+/* ─── Base ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f6f6f6;
+  color: #2d2f2f;
+  font-family: var(--font-inter), 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-space-grotesk), 'Space Grotesk', sans-serif;
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
